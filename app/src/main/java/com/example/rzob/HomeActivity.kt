@@ -2,9 +2,11 @@ package com.example.rzob
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -19,6 +21,18 @@ class HomeActivity : AppCompatActivity() {
     var p_day:String = ""
     var p_month:String = ""
     var p_year:String = ""
+    private var backPressedTime = 0L
+
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
+    override fun onBackPressed() {
+        if(backPressedTime + 2000 > System.currentTimeMillis()) {
+            super.onBackPressed()
+            finishAffinity()
+        }else {
+            Toast.makeText(applicationContext, "Нажмите еще раз для выхода!", Toast.LENGTH_SHORT).show()
+        }
+        backPressedTime = System.currentTimeMillis()
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
