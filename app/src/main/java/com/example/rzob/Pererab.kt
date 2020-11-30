@@ -72,7 +72,7 @@ class Pererab : AppCompatActivity() {
                 var data_hours15 = p0.child("Часы С Коэф 1,5").value
                 if (data_hours15 == null) {
                     hours_edittext.setText("0.0")
-                    Toast.makeText(applicationContext, "Часов переработки\n нету", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Часов переработки\n нет", Toast.LENGTH_SHORT).show()
                 } else {
                     delete_btn.visibility = View.VISIBLE
                     var data_hours2 = p0.child("Часы С Коэф 2").value

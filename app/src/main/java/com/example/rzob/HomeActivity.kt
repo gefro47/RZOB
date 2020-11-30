@@ -5,13 +5,19 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.activity_pererab.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -38,6 +44,8 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        btn_delete_day.visibility = View.INVISIBLE
 
         val fbd = SimpleDateFormat("d")
         val FBD = fbd.format(Date())
@@ -70,7 +78,13 @@ class HomeActivity : AppCompatActivity() {
             perenos_data()
         }
 
+        btn_save_rab.setOnClickListener {
+            savedata()
+        }
 
+        btn_delete_day.setOnClickListener {
+            delete_data()
+        }
 
         sign_out_button.setOnClickListener {
             signOut()
@@ -81,6 +95,45 @@ class HomeActivity : AppCompatActivity() {
             .requestEmail()
             .build()
         googleSingInClient = GoogleSignIn.getClient(this, gso)
+        val uid = FirebaseAuth.getInstance().uid
+
+        val getdata_day = object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                val data_rab_day = p0.child("Кол-во рабочих дней").value
+                val data_otrab_day = p0.child("Кол-во отработанных дней").value
+                if (data_rab_day == null || p0.child("Кол-во рабочих дней").value.toString() == "0") {
+                    edit_text_rab_d.setText("0")
+                    Toast.makeText(applicationContext, "Рабочие дни\nне записаны!", Toast.LENGTH_SHORT).show()
+                    if (data_otrab_day == null || p0.child("Кол-во отработанных дней").value.toString() == "0") {
+                        edit_text_otrab_d.setText("0")
+                        Toast.makeText(applicationContext, "Отработанные дни\nне записаны!", Toast.LENGTH_SHORT).show()
+                    }
+                    else {
+                        edit_text_otrab_d.setText("$data_otrab_day")
+                        btn_delete_day.visibility = View.VISIBLE
+                    }
+                }
+                else {
+                    edit_text_rab_d.setText("$data_rab_day")
+                    btn_delete_day.visibility = View.VISIBLE
+                    if (data_otrab_day == null || p0.child("Кол-во отработанных дней").value.toString() == "0") {
+                        edit_text_otrab_d.setText("0")
+                        Toast.makeText(applicationContext, "Отработанные дни\nне записаны!", Toast.LENGTH_SHORT).show()
+                    }
+                    else {
+                        edit_text_otrab_d.setText("$data_otrab_day")
+                        btn_delete_day.visibility = View.VISIBLE
+                    }
+                }
+
+            }
+        }
+
+        FirebaseDatabase.getInstance().getReference("users/$uid/$p_year/$p_month")
+                .addListenerForSingleValueEvent(getdata_day)
     }
 
 
@@ -105,5 +158,55 @@ class HomeActivity : AppCompatActivity() {
         fun getLaunchIntent(from: Context) = Intent(from, HomeActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         }
+    }
+
+
+
+    fun savedata(){
+        val uid = FirebaseAuth.getInstance().uid
+        val rab_day = edit_text_rab_d.text
+        val otrab_day = edit_text_otrab_d.text
+        FirebaseDatabase.getInstance().getReference("users/$uid")
+                .child(p_year).child(p_month).child("Кол-во рабочих дней").setValue("$rab_day")
+                .addOnSuccessListener {
+                    Toast.makeText(applicationContext, "Сохранено\nРабочие дни:     $rab_day", Toast.LENGTH_SHORT).show()
+                    btn_delete_day.visibility = View.VISIBLE
+                }
+                .addOnFailureListener {
+                    Toast.makeText(applicationContext, "Ошибка, попробуй позже!", Toast.LENGTH_SHORT).show()
+                }
+        FirebaseDatabase.getInstance().getReference("users/$uid")
+                .child(p_year).child(p_month).child("Кол-во отработанных дней").setValue("$otrab_day")
+                .addOnSuccessListener {
+                    Toast.makeText(applicationContext, "Сохранено\nОтработанные дни:     $otrab_day", Toast.LENGTH_SHORT).show()
+                    btn_delete_day.visibility = View.VISIBLE
+                }
+                .addOnFailureListener {
+                    Toast.makeText(applicationContext, "Ошибка, попробуй позже!", Toast.LENGTH_SHORT).show()
+                }
+    }
+
+    fun delete_data(){
+        val uid = FirebaseAuth.getInstance().uid
+        FirebaseDatabase.getInstance().getReference("users/$uid")
+                .child("$p_year").child("$p_month").child("Кол-во рабочих дней").removeValue()
+                .addOnSuccessListener {
+                    edit_text_rab_d.setText("0")
+                    Toast.makeText(applicationContext, "Успешно удалено", Toast.LENGTH_SHORT).show()
+                    btn_delete_day.visibility = View.INVISIBLE
+                }
+                .addOnFailureListener {
+                    Toast.makeText(applicationContext, "Ошибка, попробуй позже!", Toast.LENGTH_SHORT).show()
+                }
+        FirebaseDatabase.getInstance().getReference("users/$uid")
+                .child("$p_year").child("$p_month").child("Кол-во отработанных дней").removeValue()
+                .addOnSuccessListener {
+                    edit_text_otrab_d.setText("0")
+                    Toast.makeText(applicationContext, "Успешно удалено", Toast.LENGTH_SHORT).show()
+                    btn_delete_day.visibility = View.INVISIBLE
+                }
+                .addOnFailureListener {
+                    Toast.makeText(applicationContext, "Ошибка, попробуй позже!", Toast.LENGTH_SHORT).show()
+                }
     }
 }
