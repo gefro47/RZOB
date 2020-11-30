@@ -14,6 +14,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="36dp"
         android:text="выход"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,9 +45,10 @@
 
     <Button
         android:id="@+id/pererab_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Переработка\nзапись"
+        android:layout_width="130dp"
+        android:layout_height="50dp"
+        android:text="Переработка\nза день"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.05"
@@ -116,6 +118,7 @@
         android:layout_height="51dp"
         android:layout_marginTop="8dp"
         android:text="Запись\nраб дней"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.949"
@@ -128,11 +131,25 @@
         android:layout_width="108dp"
         android:layout_height="54dp"
         android:text="Удалить\nраб дни"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/btn_save_rab"
         app:layout_constraintTop_toBottomOf="@+id/btn_save_rab"
         app:layout_constraintVertical_bias="0.026" />
+
+    <Button
+        android:id="@+id/btn_vse_pererab"
+        android:layout_width="130dp"
+        android:layout_height="50dp"
+        android:text="Перераб\nза месяц"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendarView"
+        app:layout_constraintVertical_bias="0.468" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

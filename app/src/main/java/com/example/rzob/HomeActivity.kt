@@ -90,6 +90,10 @@ class HomeActivity : AppCompatActivity() {
             signOut()
         }
 
+        btn_vse_pererab.setOnClickListener {
+            vsya_pererav_page_with_data()
+        }
+
         var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -132,7 +136,7 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-        FirebaseDatabase.getInstance().getReference("users/$uid/$p_year/$p_month")
+        FirebaseDatabase.getInstance().getReference("users/$uid/$p_year/$p_month(1)")
                 .addListenerForSingleValueEvent(getdata_day)
     }
 
@@ -141,6 +145,13 @@ class HomeActivity : AppCompatActivity() {
     fun perenos_data(){
          val intent = Intent(this@HomeActivity, Pererab::class.java)
         intent.putExtra("Day", p_day)
+        intent.putExtra("Month", p_month)
+        intent.putExtra("Year", p_year)
+        startActivity(intent)
+    }
+
+    fun vsya_pererav_page_with_data(){
+        val intent = Intent(this@HomeActivity, VsyaPererab::class.java)
         intent.putExtra("Month", p_month)
         intent.putExtra("Year", p_year)
         startActivity(intent)
@@ -167,7 +178,7 @@ class HomeActivity : AppCompatActivity() {
         val rab_day = edit_text_rab_d.text
         val otrab_day = edit_text_otrab_d.text
         FirebaseDatabase.getInstance().getReference("users/$uid")
-                .child(p_year).child(p_month).child("Кол-во рабочих дней").setValue("$rab_day")
+                .child(p_year).child("$p_month(1)").child("Кол-во рабочих дней").setValue("$rab_day")
                 .addOnSuccessListener {
                     Toast.makeText(applicationContext, "Сохранено\nРабочие дни:     $rab_day", Toast.LENGTH_SHORT).show()
                     btn_delete_day.visibility = View.VISIBLE
@@ -176,7 +187,7 @@ class HomeActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, "Ошибка, попробуй позже!", Toast.LENGTH_SHORT).show()
                 }
         FirebaseDatabase.getInstance().getReference("users/$uid")
-                .child(p_year).child(p_month).child("Кол-во отработанных дней").setValue("$otrab_day")
+                .child(p_year).child("$p_month(1)").child("Кол-во отработанных дней").setValue("$otrab_day")
                 .addOnSuccessListener {
                     Toast.makeText(applicationContext, "Сохранено\nОтработанные дни:     $otrab_day", Toast.LENGTH_SHORT).show()
                     btn_delete_day.visibility = View.VISIBLE
@@ -189,7 +200,7 @@ class HomeActivity : AppCompatActivity() {
     fun delete_data(){
         val uid = FirebaseAuth.getInstance().uid
         FirebaseDatabase.getInstance().getReference("users/$uid")
-                .child("$p_year").child("$p_month").child("Кол-во рабочих дней").removeValue()
+                .child("$p_year").child("$p_month(1)").child("Кол-во рабочих дней").removeValue()
                 .addOnSuccessListener {
                     edit_text_rab_d.setText("0")
                     Toast.makeText(applicationContext, "Успешно удалено", Toast.LENGTH_SHORT).show()
@@ -199,7 +210,7 @@ class HomeActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, "Ошибка, попробуй позже!", Toast.LENGTH_SHORT).show()
                 }
         FirebaseDatabase.getInstance().getReference("users/$uid")
-                .child("$p_year").child("$p_month").child("Кол-во отработанных дней").removeValue()
+                .child("$p_year").child("$p_month(1)").child("Кол-во отработанных дней").removeValue()
                 .addOnSuccessListener {
                     edit_text_otrab_d.setText("0")
                     Toast.makeText(applicationContext, "Успешно удалено", Toast.LENGTH_SHORT).show()
