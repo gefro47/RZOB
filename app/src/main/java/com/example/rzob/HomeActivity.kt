@@ -27,7 +27,9 @@ class HomeActivity : AppCompatActivity() {
     var p_day:String = ""
     var p_month:String = ""
     var p_year:String = ""
+    var sob: Int = 0
     private var backPressedTime = 0L
+    val uid = FirebaseAuth.getInstance().uid
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun onBackPressed() {
@@ -71,6 +73,8 @@ class HomeActivity : AppCompatActivity() {
             p_year = gyear
 //            textView.text = "$day.${month + 1}.$year"
             DataPickView.text = gday + "." + gmonth + "." + gyear
+            proverka()
+
         }
 
 
@@ -94,12 +98,13 @@ class HomeActivity : AppCompatActivity() {
             vsya_pererav_page_with_data()
         }
 
+
         var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
         googleSingInClient = GoogleSignIn.getClient(this, gso)
-        val uid = FirebaseAuth.getInstance().uid
+
 
         val getdata_day = object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -135,10 +140,62 @@ class HomeActivity : AppCompatActivity() {
 
             }
         }
-
-        FirebaseDatabase.getInstance().getReference("users/$uid/$p_year/$p_month(1)")
+//            FirebaseDatabase.getInstance().getReference("users/$uid/$p_year/$p_month")
+//                    .addValueEventListener(getdata_day)
+        FirebaseDatabase.getInstance().getReference("users/$uid/$p_year/$p_month")
                 .addListenerForSingleValueEvent(getdata_day)
+
+
     }
+
+
+    fun proverka (){
+//        val uid = FirebaseAuth.getInstance().uid
+        val s_month = p_month.toInt()
+        if (s_month != sob) {
+            val getdata_day = object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    val data_rab_day = p0.child("Кол-во рабочих дней").value
+                    val data_otrab_day = p0.child("Кол-во отработанных дней").value
+                    if (data_rab_day == null || p0.child("Кол-во рабочих дней").value.toString() == "0") {
+                        edit_text_rab_d.setText("0")
+                        Toast.makeText(applicationContext, "Рабочие дни\nне записаны!", Toast.LENGTH_SHORT).show()
+                        if (data_otrab_day == null || p0.child("Кол-во отработанных дней").value.toString() == "0") {
+                            edit_text_otrab_d.setText("0")
+                            Toast.makeText(applicationContext, "Отработанные дни\nне записаны!", Toast.LENGTH_SHORT).show()
+                        }
+                        else {
+                            edit_text_otrab_d.setText("$data_otrab_day")
+                            btn_delete_day.visibility = View.VISIBLE
+                        }
+                    }
+                    else {
+                        edit_text_rab_d.setText("$data_rab_day")
+                        btn_delete_day.visibility = View.VISIBLE
+                        if (data_otrab_day == null || p0.child("Кол-во отработанных дней").value.toString() == "0") {
+                            edit_text_otrab_d.setText("0")
+                            Toast.makeText(applicationContext, "Отработанные дни\nне записаны!", Toast.LENGTH_SHORT).show()
+                        }
+                        else {
+                            edit_text_otrab_d.setText("$data_otrab_day")
+                            btn_delete_day.visibility = View.VISIBLE
+                        }
+                    }
+
+                }
+            }
+//            FirebaseDatabase.getInstance().getReference("users/$uid/$p_year/$p_month")
+//                    .addValueEventListener(getdata_day)
+            FirebaseDatabase.getInstance().getReference("users/$uid/$p_year/$p_month")
+                    .addListenerForSingleValueEvent(getdata_day)
+
+            sob = s_month
+        }
+    }
+
 
 
 
@@ -174,23 +231,27 @@ class HomeActivity : AppCompatActivity() {
 
 
     fun savedata(){
-        val uid = FirebaseAuth.getInstance().uid
+//        val uid = FirebaseAuth.getInstance().uid
         val rab_day = edit_text_rab_d.text
         val otrab_day = edit_text_otrab_d.text
         FirebaseDatabase.getInstance().getReference("users/$uid")
-                .child(p_year).child("$p_month(1)").child("Кол-во рабочих дней").setValue("$rab_day")
+                .child(p_year).child("$p_month").child("Кол-во рабочих дней").setValue("$rab_day")
                 .addOnSuccessListener {
-                    Toast.makeText(applicationContext, "Сохранено\nРабочие дни:     $rab_day", Toast.LENGTH_SHORT).show()
-                    btn_delete_day.visibility = View.VISIBLE
+                    if (rab_day.toString() != "0"){
+                        Toast.makeText(applicationContext, "Сохранено\nРабочие дни:     $rab_day", Toast.LENGTH_SHORT).show()
+                        btn_delete_day.visibility = View.VISIBLE
+                    }
                 }
                 .addOnFailureListener {
                     Toast.makeText(applicationContext, "Ошибка, попробуй позже!", Toast.LENGTH_SHORT).show()
                 }
         FirebaseDatabase.getInstance().getReference("users/$uid")
-                .child(p_year).child("$p_month(1)").child("Кол-во отработанных дней").setValue("$otrab_day")
+                .child(p_year).child("$p_month").child("Кол-во отработанных дней").setValue("$otrab_day")
                 .addOnSuccessListener {
-                    Toast.makeText(applicationContext, "Сохранено\nОтработанные дни:     $otrab_day", Toast.LENGTH_SHORT).show()
-                    btn_delete_day.visibility = View.VISIBLE
+                    if (otrab_day.toString() != "0") {
+                        Toast.makeText(applicationContext, "Сохранено\nОтработанные дни:     $otrab_day", Toast.LENGTH_SHORT).show()
+                        btn_delete_day.visibility = View.VISIBLE
+                    }
                 }
                 .addOnFailureListener {
                     Toast.makeText(applicationContext, "Ошибка, попробуй позже!", Toast.LENGTH_SHORT).show()
@@ -198,9 +259,9 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun delete_data(){
-        val uid = FirebaseAuth.getInstance().uid
+//        val uid = FirebaseAuth.getInstance().uid
         FirebaseDatabase.getInstance().getReference("users/$uid")
-                .child("$p_year").child("$p_month(1)").child("Кол-во рабочих дней").removeValue()
+                .child("$p_year").child("$p_month").child("Кол-во рабочих дней").removeValue()
                 .addOnSuccessListener {
                     edit_text_rab_d.setText("0")
                     Toast.makeText(applicationContext, "Успешно удалено", Toast.LENGTH_SHORT).show()
@@ -210,7 +271,7 @@ class HomeActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, "Ошибка, попробуй позже!", Toast.LENGTH_SHORT).show()
                 }
         FirebaseDatabase.getInstance().getReference("users/$uid")
-                .child("$p_year").child("$p_month(1)").child("Кол-во отработанных дней").removeValue()
+                .child("$p_year").child("$p_month").child("Кол-во отработанных дней").removeValue()
                 .addOnSuccessListener {
                     edit_text_otrab_d.setText("0")
                     Toast.makeText(applicationContext, "Успешно удалено", Toast.LENGTH_SHORT).show()
