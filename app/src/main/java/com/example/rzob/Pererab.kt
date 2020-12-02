@@ -19,7 +19,12 @@ class Pererab : AppCompatActivity() {
 
     var googleSingInClient : GoogleSignInClient? = null
 
-
+//    val intent = intent
+//    var day = intent.getStringExtra("Day")
+//    var month = intent.getStringExtra("Month")
+//    var year = intent.getStringExtra("Year")
+//    val uid = FirebaseAuth.getInstance().uid
+//    val pyt = "users/$uid/$year/$month/переработка/$day"
 
 
 
@@ -33,7 +38,6 @@ class Pererab : AppCompatActivity() {
             .requestEmail()
             .build()
         googleSingInClient = GoogleSignIn.getClient(this, gso)
-
 
 
         val intent = intent
@@ -94,19 +98,30 @@ class Pererab : AppCompatActivity() {
         }
 //        FirebaseDatabase.getInstance().getReference("users/$uid/$year/$month/$day")
 //                .addValueEventListener(getdata_hours)
-        FirebaseDatabase.getInstance().getReference("users/$uid/$year/$month/$day")
+        FirebaseDatabase.getInstance().getReference(pyti())
                 .addListenerForSingleValueEvent(getdata_hours)
 
     }
 
-    fun delete_data(){
+    fun pyti(): String {
         val intent = intent
         var day = intent.getStringExtra("Day")
         var month = intent.getStringExtra("Month")
         var year = intent.getStringExtra("Year")
         val uid = FirebaseAuth.getInstance().uid
-        FirebaseDatabase.getInstance().getReference("users/$uid")
-                .child("$year").child("$month").child("$day").removeValue()
+        val pyt = "users/$uid/$year/$month/переработка/$day"
+        return pyt
+    }
+
+    fun delete_data(){
+//        val intent = intent
+//        var day = intent.getStringExtra("Day")
+//        var month = intent.getStringExtra("Month")
+//        var year = intent.getStringExtra("Year")
+//        val uid = FirebaseAuth.getInstance().uid
+        FirebaseDatabase.getInstance().getReference(pyti())
+//                .child("$year").child("$month").child("$day")
+                .removeValue()
                 .addOnSuccessListener {
                     hours_edittext.setText("0.0")
                     Toast.makeText(applicationContext, "Успешно удалено", Toast.LENGTH_SHORT).show()
@@ -118,19 +133,20 @@ class Pererab : AppCompatActivity() {
     }
 
     fun save_data(){
-        val intent = intent
-        var day = intent.getStringExtra("Day")
-        var month = intent.getStringExtra("Month")
-        var year = intent.getStringExtra("Year")
-        val uid = FirebaseAuth.getInstance().uid
+//        val intent = intent
+//        var day = intent.getStringExtra("Day")
+//        var month = intent.getStringExtra("Month")
+//        var year = intent.getStringExtra("Year")
+//        val uid = FirebaseAuth.getInstance().uid
         val hours = hours_edittext.text
         if (hours.toString() != ""){
             val hours1 = hours.toString()
             var Hours1 = hours1.toDouble()
             if (Hours1 <= 2.0){
                 val hours15 = hours1
-                FirebaseDatabase.getInstance().getReference("users/$uid")
-                    .child("$year").child("$month").child("$day").child("Часы С Коэф 1,5").setValue(hours15)
+                FirebaseDatabase.getInstance().getReference(pyti())
+//                    .child("$year").child("$month").child("$day")
+                        .child("Часы С Коэф 1,5").setValue(hours15)
                         .addOnSuccessListener {
 //                            Toast.makeText(applicationContext, "Сохранено", Toast.LENGTH_SHORT).show()
                             Toast.makeText(applicationContext, "Сохранено\nЧасы С Коэф 1,5:     $hours15", Toast.LENGTH_SHORT).show()
@@ -147,8 +163,9 @@ class Pererab : AppCompatActivity() {
                 val hours2 = Hours1.toBigDecimal()
                 val result = hours2.subtract(x)
 //                        textView3.text = "$result"
-                FirebaseDatabase.getInstance().getReference("users/$uid")
-                    .child("$year").child("$month").child("$day").child("Часы С Коэф 1,5").setValue(hours15)
+                FirebaseDatabase.getInstance().getReference(pyti())
+//                    .child("$year").child("$month").child("$day")
+                        .child("Часы С Коэф 1,5").setValue(hours15)
                         .addOnSuccessListener {
 //                            Toast.makeText(applicationContext, "Сохранено", Toast.LENGTH_SHORT).show()
                             Toast.makeText(applicationContext, "Сохранено\nЧасы С Коэф 1,5:    $hours15", Toast.LENGTH_SHORT).show()
@@ -157,8 +174,9 @@ class Pererab : AppCompatActivity() {
                         .addOnFailureListener {
                             Toast.makeText(applicationContext, "Ошибка, попробуй позже!", Toast.LENGTH_SHORT).show()
                         }
-                FirebaseDatabase.getInstance().getReference("users/$uid")
-                    .child("$year").child("$month").child("$day").child("Часы С Коэф 2").setValue(result.toString())
+                FirebaseDatabase.getInstance().getReference(pyti())
+//                    .child("$year").child("$month").child("$day")
+                        .child("Часы С Коэф 2").setValue(result.toString())
                         .addOnSuccessListener {
 //                            Toast.makeText(applicationContext, "Сохранено", Toast.LENGTH_SHORT).show()
                             Toast.makeText(applicationContext, "Сохранено\nЧасы С Коэф 2:     $result", Toast.LENGTH_SHORT).show()

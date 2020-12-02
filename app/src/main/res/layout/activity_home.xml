@@ -127,7 +127,7 @@
         app:layout_constraintVertical_bias="0.002" />
 
     <Button
-        android:id="@+id/btn_delete_day"
+        android:id="@+id/btn_delete"
         android:layout_width="108dp"
         android:layout_height="54dp"
         android:text="Удалить\nраб дни"

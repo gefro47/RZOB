@@ -70,7 +70,7 @@ class VsyaPererab : AppCompatActivity() {
 
         val uid = FirebaseAuth.getInstance().uid
 
-        FirebaseDatabase.getInstance().getReference("users/$uid/$year/$month")
+        FirebaseDatabase.getInstance().getReference("users/$uid/$year/$month/переработка")
                 .addListenerForSingleValueEvent(getdata_hours)
     }
 }

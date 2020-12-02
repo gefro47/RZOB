@@ -47,7 +47,7 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        btn_delete_day.visibility = View.INVISIBLE
+        btn_delete.visibility = View.INVISIBLE
 
         val fbd = SimpleDateFormat("d")
         val FBD = fbd.format(Date())
@@ -86,7 +86,7 @@ class HomeActivity : AppCompatActivity() {
             savedata()
         }
 
-        btn_delete_day.setOnClickListener {
+        btn_delete.setOnClickListener {
             delete_data()
         }
 
@@ -96,6 +96,10 @@ class HomeActivity : AppCompatActivity() {
 
         btn_vse_pererab.setOnClickListener {
             vsya_pererav_page_with_data()
+        }
+
+        parametr_btn.setOnClickListener {
+            startActivity(Intent(this,Parametry::class.java))
         }
 
 
@@ -122,19 +126,19 @@ class HomeActivity : AppCompatActivity() {
                     }
                     else {
                         edit_text_otrab_d.setText("$data_otrab_day")
-                        btn_delete_day.visibility = View.VISIBLE
+                        btn_delete.visibility = View.VISIBLE
                     }
                 }
                 else {
                     edit_text_rab_d.setText("$data_rab_day")
-                    btn_delete_day.visibility = View.VISIBLE
+                    btn_delete.visibility = View.VISIBLE
                     if (data_otrab_day == null || p0.child("Кол-во отработанных дней").value.toString() == "0") {
                         edit_text_otrab_d.setText("0")
                         Toast.makeText(applicationContext, "Отработанные дни\nне записаны!", Toast.LENGTH_SHORT).show()
                     }
                     else {
                         edit_text_otrab_d.setText("$data_otrab_day")
-                        btn_delete_day.visibility = View.VISIBLE
+                        btn_delete.visibility = View.VISIBLE
                     }
                 }
 
@@ -169,19 +173,19 @@ class HomeActivity : AppCompatActivity() {
                         }
                         else {
                             edit_text_otrab_d.setText("$data_otrab_day")
-                            btn_delete_day.visibility = View.VISIBLE
+                            btn_delete.visibility = View.VISIBLE
                         }
                     }
                     else {
                         edit_text_rab_d.setText("$data_rab_day")
-                        btn_delete_day.visibility = View.VISIBLE
+                        btn_delete.visibility = View.VISIBLE
                         if (data_otrab_day == null || p0.child("Кол-во отработанных дней").value.toString() == "0") {
                             edit_text_otrab_d.setText("0")
                             Toast.makeText(applicationContext, "Отработанные дни\nне записаны!", Toast.LENGTH_SHORT).show()
                         }
                         else {
                             edit_text_otrab_d.setText("$data_otrab_day")
-                            btn_delete_day.visibility = View.VISIBLE
+                            btn_delete.visibility = View.VISIBLE
                         }
                     }
 
@@ -239,7 +243,7 @@ class HomeActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     if (rab_day.toString() != "0"){
                         Toast.makeText(applicationContext, "Сохранено\nРабочие дни:     $rab_day", Toast.LENGTH_SHORT).show()
-                        btn_delete_day.visibility = View.VISIBLE
+                        btn_delete.visibility = View.VISIBLE
                     }
                 }
                 .addOnFailureListener {
@@ -250,7 +254,7 @@ class HomeActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     if (otrab_day.toString() != "0") {
                         Toast.makeText(applicationContext, "Сохранено\nОтработанные дни:     $otrab_day", Toast.LENGTH_SHORT).show()
-                        btn_delete_day.visibility = View.VISIBLE
+                        btn_delete.visibility = View.VISIBLE
                     }
                 }
                 .addOnFailureListener {
@@ -265,7 +269,7 @@ class HomeActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     edit_text_rab_d.setText("0")
                     Toast.makeText(applicationContext, "Успешно удалено", Toast.LENGTH_SHORT).show()
-                    btn_delete_day.visibility = View.INVISIBLE
+                    btn_delete.visibility = View.INVISIBLE
                 }
                 .addOnFailureListener {
                     Toast.makeText(applicationContext, "Ошибка, попробуй позже!", Toast.LENGTH_SHORT).show()
@@ -275,10 +279,14 @@ class HomeActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     edit_text_otrab_d.setText("0")
                     Toast.makeText(applicationContext, "Успешно удалено", Toast.LENGTH_SHORT).show()
-                    btn_delete_day.visibility = View.INVISIBLE
+                    btn_delete.visibility = View.INVISIBLE
                 }
                 .addOnFailureListener {
                     Toast.makeText(applicationContext, "Ошибка, попробуй позже!", Toast.LENGTH_SHORT).show()
                 }
+    }
+
+    fun raschet(){
+
     }
 }
