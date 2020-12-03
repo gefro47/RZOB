@@ -2,6 +2,7 @@ package com.example.rzob
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -10,16 +11,14 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.activity_vsya_pererab.*
-import java.lang.StringBuilder
 
-class VsyaPererab : AppCompatActivity() {
+class Raschet : AppCompatActivity() {
 
-    var googleSingInClient: GoogleSignInClient? = null
+    var googleSingInClient : GoogleSignInClient? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_vsya_pererab)
+        setContentView(R.layout.activity_raschet)
 
         var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -27,28 +26,21 @@ class VsyaPererab : AppCompatActivity() {
                 .build()
         googleSingInClient = GoogleSignIn.getClient(this, gso)
 
+        val uid = FirebaseAuth.getInstance().uid
+
         val intent = intent
+        var day = intent.getStringExtra("Day")
         var month = intent.getStringExtra("Month")
         var year = intent.getStringExtra("Year")
-
-        date_text_view.text = "$month.$year"
-
-        prew_btn.setOnClickListener {
-            finish()
-        }
-
 
         var getdata_hours = object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                var sb = StringBuilder()
                 val sum15 = arrayListOf<Double>()
                 val sum2 = arrayListOf<Double>()
-                for (i in p0.children) {
-//                    var k15 = i.child("Часы С Коэф 1,5").value
-//                    var k2 = i.child("Часы С Коэф 2").value
+                for (i in p0.child("$year/$month/переработка").children) {
                     var k15 = i.child("Часы С Коэф 1,5").value.toString().toDouble()
                     var k2 = i.child("Часы С Коэф 2").value
                     sum15.add(k15)
@@ -58,30 +50,21 @@ class VsyaPererab : AppCompatActivity() {
                         k2 = i.child("Часы С Коэф 2").value.toString().toDouble()
                     }
                     sum2.add(k2)
-                    sb.append("${i.key}          K1,5:  $k15        K2:  $k2\n")
                 }
                 val sum15end = sum15.sum()
                 val sum2end = sum2.sum()
-                textView8.text = "$sum15end     $sum2end"
-                data_text_view.setText(sb)
+                if (sum15end == 0.0){
+                    Toast.makeText(applicationContext, "Переработки нет!", Toast.LENGTH_SHORT).show()
+                }
+                var ZP = p0.child("Зарплата").value
+                if (p0.child("Зарплата").value.toString() == "0" || ZP == null){
+                    Toast.makeText(applicationContext, "Укажите зарплату\nв параметрах!", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
-//        val uid = FirebaseAuth.getInstance().uid
 
-        FirebaseDatabase.getInstance().getReference(pyti())
-                .addListenerForSingleValueEvent(getdata_hours)
+        FirebaseDatabase.getInstance().getReference("users/$uid")
+            .addListenerForSingleValueEvent(getdata_hours)
     }
-
-    fun pyti(): String {
-//        val intent = intent
-//        var day = intent.getStringExtra("Day")
-        var month = intent.getStringExtra("Month")
-        var year = intent.getStringExtra("Year")
-        val uid = FirebaseAuth.getInstance().uid
-        val pyt = "users/$uid/$year/$month/переработка"
-        return pyt
-
-    }
-
 }

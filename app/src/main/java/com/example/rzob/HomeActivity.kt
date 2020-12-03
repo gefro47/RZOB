@@ -102,6 +102,10 @@ class HomeActivity : AppCompatActivity() {
             startActivity(Intent(this,Parametry::class.java))
         }
 
+        btn_raschet.setOnClickListener {
+            raschet()
+        }
+
 
         var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -287,6 +291,9 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun raschet(){
-
+        val intent = Intent(this@HomeActivity, Raschet::class.java)
+        intent.putExtra("Month", p_month)
+        intent.putExtra("Year", p_year)
+        startActivity(intent)
     }
 }

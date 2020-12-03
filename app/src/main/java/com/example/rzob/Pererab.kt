@@ -44,7 +44,7 @@ class Pererab : AppCompatActivity() {
         var day = intent.getStringExtra("Day")
         var month = intent.getStringExtra("Month")
         var year = intent.getStringExtra("Year")
-        val uid = FirebaseAuth.getInstance().uid
+//        val uid = FirebaseAuth.getInstance().uid
 
 //        textView3.text = uid
         textView.text = "$day.$month.$year"

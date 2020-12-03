@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RZOB">
-        <activity android:name=".Parametry"></activity>
+        <activity android:name=".Raschet"></activity>
+        <activity android:name=".Parametry" />
         <activity android:name=".VsyaPererab" />
         <activity android:name=".Pererab" />
         <activity android:name=".HomeActivity" />
