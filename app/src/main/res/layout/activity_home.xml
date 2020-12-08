@@ -47,7 +47,7 @@
         android:id="@+id/pererab_btn"
         android:layout_width="130dp"
         android:layout_height="50dp"
-        android:text="Переработка\nза день"
+        android:text="Инфо\nза день"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -143,7 +143,7 @@
         android:id="@+id/btn_vse_pererab"
         android:layout_width="130dp"
         android:layout_height="50dp"
-        android:text="Перераб\nза месяц"
+        android:text="Инфо\nза месяц"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -163,18 +163,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pererab_btn"
         app:layout_constraintVertical_bias="0.491" />
-
-    <Button
-        android:id="@+id/btn_raschet"
-        android:layout_width="130dp"
-        android:layout_height="50dp"
-        android:text="расчет \nза месяц"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.881"
-        app:layout_constraintStart_toEndOf="@+id/parametr_btn"
-        app:layout_constraintTop_toBottomOf="@+id/pererab_btn"
-        app:layout_constraintVertical_bias="0.486" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
