@@ -25,13 +25,18 @@ class Pererab : AppCompatActivity() {
 //    var year = intent.getStringExtra("Year")
 //    val uid = FirebaseAuth.getInstance().uid
 //    val pyt = "users/$uid/$year/$month/переработка/$day"
-
+    var kek : Boolean = false
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pererab)
+
+        switch_vih.setOnCheckedChangeListener { _, onSwitch ->
+            kek = onSwitch
+        }
+
 
         var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -73,18 +78,20 @@ class Pererab : AppCompatActivity() {
             override fun onDataChange(p0: DataSnapshot) {
                 var data_hours15 = p0.child("Часы С Коэф 1,5").value
                 if (data_hours15 == null) {
-                    hours_edittext.setText("0.0")
-                    Toast.makeText(applicationContext, "Часов переработки\n нет", Toast.LENGTH_SHORT).show()
+                    var data_hours2 = p0.child("Часы С Коэф 2").value
+                    if (data_hours2 == null){
+                        hours_edittext.setText("0.0")
+                        Toast.makeText(applicationContext, "Часов переработки\n нет", Toast.LENGTH_SHORT).show()
+                    }else{
+                        var hours2 = data_hours2.toString()
+                        hours_edittext.setText("${hours2.toDouble()}")
+                    }
                 } else {
                     delete_btn.visibility = View.VISIBLE
                     var data_hours2 = p0.child("Часы С Коэф 2").value
                     if (data_hours2 == null){
-                        val hours2 = "0.0"
                         val hours15 = data_hours15.toString()
-                        val d_hours15 = hours15.toDouble()
-                        val d_hours2 = hours2.toDouble()
-                        var data_hours = d_hours15 + d_hours2
-                        hours_edittext.setText("$data_hours")
+                        hours_edittext.setText("${hours15.toDouble()}")
                     }else{
                         var hours2 = data_hours2.toString()
                         val hours15 = data_hours15.toString()
@@ -93,6 +100,10 @@ class Pererab : AppCompatActivity() {
                         var data_hours = d_hours15 + d_hours2
                         hours_edittext.setText("$data_hours")
                     }
+                }
+                val vih = p0.child("Выходной").value.toString()
+                if (vih == "Да"){
+                    switch_vih.isChecked = true
                 }
             }
         }
@@ -142,9 +153,47 @@ class Pererab : AppCompatActivity() {
         if (hours.toString() != ""){
             val hours1 = hours.toString()
             var Hours1 = hours1.toDouble()
-            if (Hours1 <= 2.0){
-                val hours15 = hours1
+            if (kek == true){
                 FirebaseDatabase.getInstance().getReference(pyti())
+//                .child("$year").child("$month").child("$day")
+                    .removeValue()
+                    .addOnSuccessListener {
+//                        hours_edittext.setText("0.0")
+//                        Toast.makeText(applicationContext, "Успешно удалено", Toast.LENGTH_SHORT).show()
+//                        delete_btn.visibility = View.INVISIBLE
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(applicationContext, "Ошибка, попробуй позже!", Toast.LENGTH_SHORT).show()
+                    }
+                val hours2 = hours1
+                FirebaseDatabase.getInstance().getReference(pyti())
+//                    .child("$year").child("$month").child("$day")
+                    .child("Часы С Коэф 2").setValue(hours2)
+                    .addOnSuccessListener {
+//                            Toast.makeText(applicationContext, "Сохранено", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "Сохранено\nЧасы С Коэф 2:     $hours2", Toast.LENGTH_SHORT).show()
+                        delete_btn.visibility = View.VISIBLE
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(applicationContext, "Ошибка, попробуй позже!", Toast.LENGTH_SHORT).show()
+                    }
+                FirebaseDatabase.getInstance().getReference(pyti())
+                    .child("Выходной").setValue("Да")
+            }else{
+                FirebaseDatabase.getInstance().getReference(pyti())
+//                .child("$year").child("$month").child("$day")
+                    .removeValue()
+                    .addOnSuccessListener {
+//                        hours_edittext.setText("0.0")
+//                        Toast.makeText(applicationContext, "Успешно удалено", Toast.LENGTH_SHORT).show()
+//                        delete_btn.visibility = View.INVISIBLE
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(applicationContext, "Ошибка, попробуй позже!", Toast.LENGTH_SHORT).show()
+                    }
+                if (Hours1 <= 2.0){
+                    val hours15 = hours1
+                    FirebaseDatabase.getInstance().getReference(pyti())
 //                    .child("$year").child("$month").child("$day")
                         .child("Часы С Коэф 1,5").setValue(hours15)
                         .addOnSuccessListener {
@@ -156,14 +205,14 @@ class Pererab : AppCompatActivity() {
                             Toast.makeText(applicationContext, "Ошибка, попробуй позже!", Toast.LENGTH_SHORT).show()
                         }
 //                        textView3.text = hours15
-            }
-            if (Hours1 > 2.0){
-                val hours15 = "2.0"
-                val x : BigDecimal = BigDecimal(2)
-                val hours2 = Hours1.toBigDecimal()
-                val result = hours2.subtract(x)
+                }
+                if (Hours1 > 2.0){
+                    val hours15 = "2.0"
+                    val x : BigDecimal = BigDecimal(2)
+                    val hours2 = Hours1.toBigDecimal()
+                    val result = hours2.subtract(x)
 //                        textView3.text = "$result"
-                FirebaseDatabase.getInstance().getReference(pyti())
+                    FirebaseDatabase.getInstance().getReference(pyti())
 //                    .child("$year").child("$month").child("$day")
                         .child("Часы С Коэф 1,5").setValue(hours15)
                         .addOnSuccessListener {
@@ -174,7 +223,7 @@ class Pererab : AppCompatActivity() {
                         .addOnFailureListener {
                             Toast.makeText(applicationContext, "Ошибка, попробуй позже!", Toast.LENGTH_SHORT).show()
                         }
-                FirebaseDatabase.getInstance().getReference(pyti())
+                    FirebaseDatabase.getInstance().getReference(pyti())
 //                    .child("$year").child("$month").child("$day")
                         .child("Часы С Коэф 2").setValue(result.toString())
                         .addOnSuccessListener {
@@ -184,6 +233,9 @@ class Pererab : AppCompatActivity() {
                         .addOnFailureListener {
                             Toast.makeText(applicationContext, "Ошибка, попробуй позже!", Toast.LENGTH_SHORT).show()
                         }
+                }
+                FirebaseDatabase.getInstance().getReference(pyti())
+                    .child("Выходной").setValue("Нет")
             }
         }
     }

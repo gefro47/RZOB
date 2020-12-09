@@ -48,13 +48,13 @@
         android:layout_height="wrap_content"
         android:text="Часы переработки"
         android:textColor="#000000"
-        android:textSize="24sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.095"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.089" />
+        app:layout_constraintVertical_bias="0.086" />
 
     <EditText
         android:id="@+id/hours_edittext"
@@ -62,13 +62,13 @@
         android:layout_height="46dp"
         android:ems="10"
         android:inputType="numberDecimal"
-        android:textSize="24sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.048"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.033" />
+        app:layout_constraintVertical_bias="0.022" />
 
     <Button
         android:id="@+id/delete_btn"
@@ -81,4 +81,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.96" />
+
+    <Switch
+        android:id="@+id/switch_vih"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Выходной"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/hours_edittext"
+        app:layout_constraintTop_toBottomOf="@+id/hours_edittext"
+        app:layout_constraintVertical_bias="0.022" />
 </androidx.constraintlayout.widget.ConstraintLayout>

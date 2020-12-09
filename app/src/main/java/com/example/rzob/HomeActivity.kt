@@ -64,7 +64,7 @@ class HomeActivity : AppCompatActivity() {
         p_year = gyear
         DataPickView.text = gday + "." + gmonth + "." + gyear
         calendarView.setOnDateChangeListener{calendarView, year, month, day ->
-            Toast.makeText(this@HomeActivity, "Selected date: $day.${month + 1}.$year", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@HomeActivity, "Выбрана дата: $day.${month + 1}.$year", Toast.LENGTH_SHORT).show()
             gday = "$day"
             p_day = gday
             gmonth = "${month + 1}"
@@ -117,12 +117,18 @@ class HomeActivity : AppCompatActivity() {
             override fun onDataChange(p0: DataSnapshot) {
                 val data_rab_day = p0.child("Кол-во рабочих дней").value
                 val data_otrab_day = p0.child("Кол-во отработанных дней").value
-                if (data_rab_day == null || p0.child("Кол-во рабочих дней").value.toString() == "0") {
+                val data_ZP = p0.child("Зарплата").value
+                if (data_rab_day == null || p0.child("Кол-во рабочих дней").value.toString() == "0" || p0.child("Кол-во рабочих дней").value.toString() == "") {
                     edit_text_rab_d.setText("0")
                     Toast.makeText(applicationContext, "Рабочие дни\nне записаны!", Toast.LENGTH_SHORT).show()
-                    if (data_otrab_day == null || p0.child("Кол-во отработанных дней").value.toString() == "0") {
+                    FirebaseDatabase.getInstance().getReference("users/$uid")
+                        .child(p_year).child("$p_month").child("Кол-во рабочих дней").setValue("0")
+                    if (data_otrab_day == null || p0.child("Кол-во отработанных дней").value.toString() == "0" || p0.child("Кол-во отработанных дней").value.toString() == "") {
                         edit_text_otrab_d.setText("0")
                         Toast.makeText(applicationContext, "Отработанные дни\nне записаны!", Toast.LENGTH_SHORT).show()
+                        FirebaseDatabase.getInstance().getReference("users/$uid")
+                            .child(p_year).child("$p_month").child("Кол-во отработанных дней").setValue("0")
+                        btn_delete.visibility = View.INVISIBLE
                     }
                     else {
                         edit_text_otrab_d.setText("$data_otrab_day")
@@ -132,16 +138,21 @@ class HomeActivity : AppCompatActivity() {
                 else {
                     edit_text_rab_d.setText("$data_rab_day")
                     btn_delete.visibility = View.VISIBLE
-                    if (data_otrab_day == null || p0.child("Кол-во отработанных дней").value.toString() == "0") {
+                    if (data_otrab_day == null || p0.child("Кол-во отработанных дней").value.toString() == "0" || p0.child("Кол-во отработанных дней").value.toString() == "") {
                         edit_text_otrab_d.setText("0")
                         Toast.makeText(applicationContext, "Отработанные дни\nне записаны!", Toast.LENGTH_SHORT).show()
+                        FirebaseDatabase.getInstance().getReference("users/$uid")
+                            .child(p_year).child("$p_month").child("Кол-во отработанных дней").setValue("0")
                     }
                     else {
                         edit_text_otrab_d.setText("$data_otrab_day")
                         btn_delete.visibility = View.VISIBLE
                     }
                 }
-
+                if (data_ZP == null  || p0.child("Зарплата").value.toString() == "") {
+                    FirebaseDatabase.getInstance().getReference("users/$uid")
+                        .child(p_year).child("$p_month").child("Зарплата").setValue("0")
+                }
             }
         }
 //            FirebaseDatabase.getInstance().getReference("users/$uid/$p_year/$p_month")
@@ -164,12 +175,18 @@ class HomeActivity : AppCompatActivity() {
                 override fun onDataChange(p0: DataSnapshot) {
                     val data_rab_day = p0.child("Кол-во рабочих дней").value
                     val data_otrab_day = p0.child("Кол-во отработанных дней").value
-                    if (data_rab_day == null || p0.child("Кол-во рабочих дней").value.toString() == "0") {
+                    val data_ZP = p0.child("Зарплата").value
+                    if (data_rab_day == null || p0.child("Кол-во рабочих дней").value.toString() == "0" || p0.child("Кол-во рабочих дней").value.toString() == "") {
                         edit_text_rab_d.setText("0")
                         Toast.makeText(applicationContext, "Рабочие дни\nне записаны!", Toast.LENGTH_SHORT).show()
-                        if (data_otrab_day == null || p0.child("Кол-во отработанных дней").value.toString() == "0") {
+                        FirebaseDatabase.getInstance().getReference("users/$uid")
+                            .child(p_year).child("$p_month").child("Кол-во рабочих дней").setValue("0")
+                        if (data_otrab_day == null || p0.child("Кол-во отработанных дней").value.toString() == "0" || p0.child("Кол-во отработанных дней").value.toString() == "") {
                             edit_text_otrab_d.setText("0")
                             Toast.makeText(applicationContext, "Отработанные дни\nне записаны!", Toast.LENGTH_SHORT).show()
+                            FirebaseDatabase.getInstance().getReference("users/$uid")
+                                .child(p_year).child("$p_month").child("Кол-во отработанных дней").setValue("0")
+                            btn_delete.visibility = View.INVISIBLE
                         }
                         else {
                             edit_text_otrab_d.setText("$data_otrab_day")
@@ -179,16 +196,21 @@ class HomeActivity : AppCompatActivity() {
                     else {
                         edit_text_rab_d.setText("$data_rab_day")
                         btn_delete.visibility = View.VISIBLE
-                        if (data_otrab_day == null || p0.child("Кол-во отработанных дней").value.toString() == "0") {
+                        if (data_otrab_day == null || p0.child("Кол-во отработанных дней").value.toString() == "0" || p0.child("Кол-во отработанных дней").value.toString() == "") {
                             edit_text_otrab_d.setText("0")
                             Toast.makeText(applicationContext, "Отработанные дни\nне записаны!", Toast.LENGTH_SHORT).show()
+                            FirebaseDatabase.getInstance().getReference("users/$uid")
+                                .child(p_year).child("$p_month").child("Кол-во отработанных дней").setValue("0")
                         }
                         else {
                             edit_text_otrab_d.setText("$data_otrab_day")
                             btn_delete.visibility = View.VISIBLE
                         }
                     }
-
+                    if (data_ZP == null  || p0.child("Зарплата").value.toString() == "") {
+                        FirebaseDatabase.getInstance().getReference("users/$uid")
+                            .child(p_year).child("$p_month").child("Зарплата").setValue("0")
+                    }
                 }
             }
 //            FirebaseDatabase.getInstance().getReference("users/$uid/$p_year/$p_month")
