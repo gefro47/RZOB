@@ -3,6 +3,7 @@ package com.example.rzob
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -30,11 +31,31 @@ class VsyaPererab : AppCompatActivity() {
             .build()
         googleSingInClient = GoogleSignIn.getClient(this, gso)
 
+        textView5.visibility = View.INVISIBLE
+        textView8.visibility = View.INVISIBLE
+        textView9.visibility = View.INVISIBLE
+        data_text_view.visibility = View.INVISIBLE
+        k15_text_view.visibility = View.INVISIBLE
+        k2_text_view.visibility = View.INVISIBLE
+        textView13.visibility = View.INVISIBLE
+        text_k15.visibility = View.INVISIBLE
+        text_k2.visibility = View.INVISIBLE
+
         val intent = intent
         var month = intent.getStringExtra("Month")
         var year = intent.getStringExtra("Year")
 
         date_text_view.text = "$month.$year"
+
+        avans_text.setText("Аванс 20.$month.$year:")
+
+        if (month != null && year != null) {
+            if(month.toInt() == 12) {
+                zp_text.setText("Зарплата 5.1.${year.toInt()+1}:")
+            }else{
+                zp_text.setText("Зарплата 5.${month.toInt()+1}.$year:")
+            }
+        }
 
             prew_btn.setOnClickListener {
             finish()
@@ -69,7 +90,9 @@ class VsyaPererab : AppCompatActivity() {
 
 
 
-                var sb = StringBuilder()
+                var sb1 = StringBuilder()
+                var sb2 = StringBuilder()
+                var sb3 = StringBuilder()
                 val sum15 = arrayListOf<Double>()
                 val sum2 = arrayListOf<Double>()
                 for (i in p0.child("$year").child("$month").child("переработка").children) {
@@ -90,13 +113,34 @@ class VsyaPererab : AppCompatActivity() {
                         k2 = i.child("Часы С Коэф 2").value.toString().toDouble()
                     }
                     sum2.add(k2)
-                    sb.append("${i.key}              K1,5:  $k15            K2:  $k2\n")
+                    sb1.append("${i.key}\n")
+                    sb2.append("$k15\n")
+                    sb3.append("$k2\n")
                 }
                 val sum15end = sum15.sum()
                 val sum2end = sum2.sum()
                 text_k15.text = "$sum15end"
                 text_k2.text = "$sum2end"
-                data_text_view.setText(sb)
+                data_text_view.setText(sb1)
+                if(sb1.toString() != ""){
+                    textView5.visibility = View.VISIBLE
+                    data_text_view.visibility = View.VISIBLE
+                }
+                k15_text_view.setText(sb2)
+                if (sum15end != 0.0) {
+                    textView8.visibility = View.VISIBLE
+                    k15_text_view.visibility = View.VISIBLE
+                    text_k15.visibility = View.VISIBLE
+                }
+                k2_text_view.setText(sb3)
+                if (sum2end != 0.0) {
+                    textView9.visibility = View.VISIBLE
+                    k2_text_view.visibility = View.VISIBLE
+                    text_k2.visibility = View.VISIBLE
+                }
+                if (sum15end != 0.0 || sum2end != 0.0){
+                    textView13.visibility = View.VISIBLE
+                }
 
 
 
@@ -123,7 +167,10 @@ class VsyaPererab : AppCompatActivity() {
                 var raschet123 = raschet1 + raschet2 + raschet3
                 var raschet_d = DecimalFormat("#######.##")
                 text_raschet.text = "${raschet_d.format(raschet123)}"
-
+                val raschet_avans = raschet1/2
+                avans_raschet_text.setText("${raschet_d.format(raschet_avans)}")
+                val raschet_zp_5 = raschet123 - raschet_avans
+                zp_raschet_text.setText("${raschet_d.format(raschet_zp_5)}")
 
             }
         }
