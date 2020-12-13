@@ -97,6 +97,9 @@ class HomeActivity : AppCompatActivity() {
         btn_vse_pererab.setOnClickListener {
             vsya_pererav_page_with_data()
         }
+        info_middle_zp.setOnClickListener {
+            info_middle_zp()
+        }
 
         parametr_btn.setOnClickListener {
             startActivity(Intent(this,Parametry::class.java))
@@ -235,6 +238,13 @@ class HomeActivity : AppCompatActivity() {
 
     fun vsya_pererav_page_with_data(){
         val intent = Intent(this@HomeActivity, VsyaPererab::class.java)
+        intent.putExtra("Month", p_month)
+        intent.putExtra("Year", p_year)
+        startActivity(intent)
+    }
+
+    fun info_middle_zp() {
+        val intent = Intent(this@HomeActivity, InfoMiddleZpActivity::class.java)
         intent.putExtra("Month", p_month)
         intent.putExtra("Year", p_year)
         startActivity(intent)

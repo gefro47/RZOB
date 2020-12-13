@@ -10,6 +10,7 @@
         android:id="@+id/zp_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/fon"
         android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -213,7 +214,7 @@
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="После НДС:"
+        android:text="З/п после НДС:"
         android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -227,6 +228,7 @@
         android:id="@+id/avans_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/fon"
         android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -262,5 +264,32 @@
         app:layout_constraintStart_toStartOf="@+id/data_text_view"
         app:layout_constraintTop_toBottomOf="@+id/data_text_view"
         app:layout_constraintVertical_bias="0.01" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Перераб.(- НДС):"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/zp_text"
+        app:layout_constraintTop_toBottomOf="@+id/zp_text"
+        app:layout_constraintVertical_bias="0.01" />
+
+    <TextView
+        android:id="@+id/sum_pererab_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.035"
+        app:layout_constraintStart_toEndOf="@+id/textView7"
+        app:layout_constraintTop_toTopOf="@+id/textView7"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

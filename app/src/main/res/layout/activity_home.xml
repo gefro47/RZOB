@@ -43,19 +43,6 @@
         app:layout_constraintTop_toBottomOf="@+id/calendarView"
         app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/pererab_btn"
-        android:layout_width="130dp"
-        android:layout_height="50dp"
-        android:text="Инфо\nза день"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendarView"
-        app:layout_constraintVertical_bias="0.468" />
-
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
@@ -145,12 +132,38 @@
         android:layout_height="50dp"
         android:text="Инфо\nза месяц"
         android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/pererab_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/pererab_btn"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/pererab_btn"
+        android:layout_width="130dp"
+        android:layout_height="50dp"
+        android:text="Инфо\nза день"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintHorizontal_bias="0.035"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarView"
         app:layout_constraintVertical_bias="0.468" />
+
+    <Button
+        android:id="@+id/info_middle_zp"
+        android:layout_width="130dp"
+        android:layout_height="50dp"
+        android:text="Инфо\nсредняя з/п"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/pererab_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.96"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/pererab_btn"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/parametr_btn"

@@ -47,13 +47,13 @@ class VsyaPererab : AppCompatActivity() {
 
         date_text_view.text = "$month.$year"
 
-        avans_text.setText("Аванс 20.$month.$year:")
+        avans_text.setText(" Аванс 20.$month.$year: ")
 
         if (month != null && year != null) {
             if(month.toInt() == 12) {
-                zp_text.setText("Зарплата 5.1.${year.toInt()+1}:")
+                zp_text.setText(" Зарплата 5.1.${year.toInt()+1}: ")
             }else{
-                zp_text.setText("Зарплата 5.${month.toInt()+1}.$year:")
+                zp_text.setText(" Зарплата 5.${month.toInt()+1}.$year: ")
             }
         }
 
@@ -171,6 +171,8 @@ class VsyaPererab : AppCompatActivity() {
                 avans_raschet_text.setText("${raschet_d.format(raschet_avans)}")
                 val raschet_zp_5 = raschet123 - raschet_avans
                 zp_raschet_text.setText("${raschet_d.format(raschet_zp_5)}")
+                val raschet_pererab = raschet2 + raschet3
+                sum_pererab_text.setText("${raschet_d.format(raschet_pererab)}")
 
             }
         }
